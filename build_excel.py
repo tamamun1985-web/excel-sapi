@@ -299,7 +299,7 @@ OPER_N               = 3000
 JUAL_N               = 1000
 PKM_N                = 50      # master pakan
 ASET_N               = 50
-BATCH_N              = 50      # master batch (3-4x/tahun x 10 tahun = 30-40; buffer 50)
+BATCH_N              = 200     # master batch (kapasitas 200 batch)
 
 # --- M_Sapi: A ID,B TglMasuk,C Bangsa,D BobotAwal,E HargaBeli,F Batch,
 #             G StatusInput,H TglMati,I Terjual,J Status,K TglKeluar,L Hari ---
@@ -447,7 +447,7 @@ samples=[
     {1:('S003','str'),2:(serial(2025,8,15),'n'),3:('PO','str'),4:(330,'n'),5:(31000000,'n'),6:('B001','str'),7:('Aktif','str')},
     {1:('S004','str'),2:(serial(2025,8,15),'n'),3:('Brahman','str'),4:(345,'n'),5:(33000000,'n'),6:('B001','str'),7:('Aktif','str')},
     {1:('S005','str'),2:(serial(2025,7,1),'n'),3:('Limousin','str'),4:(410,'n'),5:(41000000,'n'),6:('B001','str'),7:('Aktif','str')},
-    {1:('S006','str'),2:(serial(2025,7,1),'n'),3:('Simental','str'),4:(420,'n'),5:(42500000,'n'),6:('B001','str'),7:('Aktif','str')},
+    {1:('S006','str'),2:(serial(2025,7,1),'n'),3:('Simental','str'),4:(420,'n'),5:(42500000,'n'),6:('B001','str'),7:('Mati','str'),8:(serial(2026,1,15),'n')},
 ]
 sheets.append(data_sheet('M_Sapi', cols, SAPI_N, samples, 'FF548235'))
 
@@ -742,6 +742,9 @@ card(6,6,'Nilai Persediaan Sapi','Lap_Keuangan!$D$24','kpi_t','kpi_rp')
 card(9,2,'Persediaan Pakan','Lap_Keuangan!$D$25','kpi_t','kpi_rp')
 card(9,4,'ADG Rata-rata (kg/hr)', f'IFERROR(AVERAGE(Analisis!$H$2:$H${SAPI_N+1}),0)','kpi_t_o','kpi_n_o')
 card(9,6,'Margin Rata-rata', f'IFERROR(AVERAGE(Analisis!$L$2:$L${SAPI_N+1}),0)','kpi_t','kpi_n')
+# row 11-12 cards (sapi mati/afkir)
+card(11,2,'Sapi Mati/Afkir', f'COUNTIF(M_Sapi!$J$2:$J${SAPI_N+1},"Mati")','kpi_t','kpi_n')
+card(11,4,'Kerugian Sapi Mati','Lap_Keuangan!$D$7','kpi_t','kpi_rp')
 # FCG table with bar (per BATCH)
 db.put(13,2,'FEED COST PER GAIN (FCG) & PERFORMA PER BATCH','str',ST['sect']); db.merge(13,2,13,6)
 for i,h in enumerate(['Batch','Jml Sapi','ADG','FCG (Rp/kg)','Visual FCG']):

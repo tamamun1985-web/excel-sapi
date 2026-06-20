@@ -160,6 +160,7 @@ ST = {
     'kpi_t'     : S.add(font=2, fill=7, border=0, h='center', v='center', wrap=1, locked=1),
     'kpi_n'     : S.add(165, font=6, fill=7, border=0, h='center', v='center', locked=1),
     'kpi_rp'    : S.add(164, font=6, fill=7, border=0, h='center', v='center', locked=1),
+    'kpi_pct'   : S.add(168, font=6, fill=7, border=0, h='center', v='center', locked=1),
     'kpi_t_g'   : S.add(font=2, fill=10, border=0, h='center', v='center', wrap=1, locked=1),
     'kpi_n_g'   : S.add(164, font=6, fill=10, border=0, h='center', v='center', locked=1),
     'kpi_t_o'   : S.add(font=2, fill=11, border=0, h='center', v='center', wrap=1, locked=1),
@@ -298,50 +299,53 @@ TIMB_N               = 6000
 OPER_N               = 3000
 JUAL_N               = 1000
 PKM_N                = 50      # master pakan
-KEL_N                = 10
 ASET_N               = 50
+BATCH_N              = 200     # master batch (kapasitas 200 batch)
 
-R_SAPI  = f'$A$2:$A${SAPI_N+1}'
-R_SAPI_L= f'M_Sapi!$L$2:$L${SAPI_N+1}'
-R_SAPI_F= f'M_Sapi!$F$2:$F${SAPI_N+1}'
+# --- M_Sapi: A ID,B TglMasuk,C Bangsa,D BobotAwal,E HargaBeli,F Batch,
+#             G StatusInput,H TglMati,I Terjual,J Status,K TglKeluar,L Hari ---
+R_SAPI       = f'$A$2:$A${SAPI_N+1}'
+R_SAPI_HARGA = f'M_Sapi!$E$2:$E${SAPI_N+1}'
+R_SAPI_BATCH = f'M_Sapi!$F$2:$F${SAPI_N+1}'
+R_SAPI_STATUS= f'M_Sapi!$J$2:$J${SAPI_N+1}'
+R_SAPI_HARI  = f'M_Sapi!$L$2:$L${SAPI_N+1}'
+# --- Penjualan: A Tgl,B ID,C Bobot,D Harga,E Total,F HPP,G Margin,H Margin% ---
 R_JUALB = f'Penjualan!$B$2:$B${JUAL_N+1}'
 R_JUALA = f'Penjualan!$A$2:$A${JUAL_N+1}'
 R_JUALE = f'Penjualan!$E$2:$E${JUAL_N+1}'
+# --- Pakan_Masuk: A Tgl,B Kode,C Qty,D HargaTotal,E Harga/kg ---
 R_PKM_B = f'Pakan_Masuk!$B$2:$B${PAKANM_N+1}'
 R_PKM_C = f'Pakan_Masuk!$C$2:$C${PAKANM_N+1}'
 R_PKM_D = f'Pakan_Masuk!$D$2:$D${PAKANM_N+1}'
-R_PKK_B = f'Pakan_Keluar!$B$2:$B${PAKANK_N+1}'
-R_PKK_C = f'Pakan_Keluar!$C$2:$C${PAKANK_N+1}'
-R_PKK_D = f'Pakan_Keluar!$D$2:$D${PAKANK_N+1}'
-R_PKK_F = f'Pakan_Keluar!$F$2:$F${PAKANK_N+1}'
+# --- Pakan_Keluar: A Tgl,B Batch,C Kode,D Qty,E Harga/kg,F Nilai ---
+R_PKK_BATCH = f'Pakan_Keluar!$B$2:$B${PAKANK_N+1}'
+R_PKK_KODE  = f'Pakan_Keluar!$C$2:$C${PAKANK_N+1}'
+R_PKK_QTY   = f'Pakan_Keluar!$D$2:$D${PAKANK_N+1}'
+R_PKK_NILAI = f'Pakan_Keluar!$F$2:$F${PAKANK_N+1}'
+# --- Operasional: A Tgl,B Batch,C Jenis,D Jumlah,E Keterangan ---
+R_OPER_BATCH  = f'Operasional!$B$2:$B${OPER_N+1}'
+R_OPER_JUMLAH = f'Operasional!$D$2:$D${OPER_N+1}'
+# --- HPP_Sapi: A ID,B Batch,C Status,D Hari,E HargaBeli,F Pakan,G Oper,H Susut,I HPP,J Bobot,K HPP/kg ---
 R_HPP_I = f'HPP_Sapi!$I$2:$I${HPP_N+1}'
 R_HPP_C = f'HPP_Sapi!$C$2:$C${HPP_N+1}'
 R_HPP_A = f'HPP_Sapi!$A$2:$A${HPP_N+1}'
-R_ASET_H= f'M_AsetTetap!$H$2:$H${ASET_N+1}'
-R_OPERC = f'Operasional!$C$2:$C${OPER_N+1}'
+# --- M_AsetTetap: A Nama,B Tgl,C Harga,D Umur,E Residu,F Peny/Bln,G UmurTpk,H Akm,I NilaiBuku ---
+R_ASET_F = f'M_AsetTetap!$F$2:$F${ASET_N+1}'
+R_ASET_C = f'M_AsetTetap!$C$2:$C${ASET_N+1}'
+# --- M_Batch: A Kode,B Ket,C Kandang,D Mulai,E Selesai,F Status,G Hari,H Bulan,
+#              I JmlSapi,J CattleDays,K Pakan,L Oper,M Susut,N Total ---
+R_BATCH_A = f'M_Batch!$A$2:$A${BATCH_N+1}'
+R_BATCH_J = f'M_Batch!$J$2:$J${BATCH_N+1}'
+R_BATCH_K = f'M_Batch!$K$2:$K${BATCH_N+1}'
+R_BATCH_L = f'M_Batch!$L$2:$L${BATCH_N+1}'
+R_BATCH_M = f'M_Batch!$M$2:$M${BATCH_N+1}'
 
-KEL_LIST = 'M_Kelompok!$A$2:$A$' + str(KEL_N + 1)
-PKM_LIST = 'M_Pakan!$A$2:$A$' + str(PKM_N + 1)
-SAPI_LIST= f'M_Sapi!$A$2:$A${SAPI_N+1}'
-
-# ============================================================================
-# 1. M_Kelompok
-# ============================================================================
-cols = [
-    {'header':'Kode Kelompok','width':16,'kind':'input','style':'i_text'},
-    {'header':'Nama Kandang','width':26,'kind':'input','style':'i_text'},
-    {'header':'Kapasitas (ekor)','width':16,'kind':'input','style':'i_int'},
-    {'header':'Keterangan','width':30,'kind':'input','style':'i_text'},
-]
-samples=[
-    {1:('K1','str'),2:('Kandang A - Bakalan Ringan','str'),3:(20,'n'),4:('Bobot < 300 kg','str')},
-    {1:('K2','str'),2:('Kandang B - Bakalan Sedang','str'),3:(20,'n'),4:('300-400 kg','str')},
-    {1:('K3','str'),2:('Kandang C - Penggemukan Akhir','str'),3:(20,'n'),4:('> 400 kg','str')},
-]
-sheets.append(data_sheet('M_Kelompok', cols, KEL_N, samples, 'FF4472C4'))
+PKM_LIST  = 'M_Pakan!$A$2:$A$' + str(PKM_N + 1)
+SAPI_LIST = f'M_Sapi!$A$2:$A${SAPI_N+1}'
+BATCH_LIST= f'M_Batch!$A$2:$A${BATCH_N+1}'
 
 # ============================================================================
-# 2. M_Pakan
+# 1. M_Pakan
 # ============================================================================
 cols = [
     {'header':'Kode Pakan','width':14,'kind':'input','style':'i_text'},
@@ -384,7 +388,40 @@ samples=[
 sheets.append(data_sheet('M_AsetTetap', cols, ASET_N, samples, 'FF4472C4'))
 
 # ============================================================================
-# 4. M_Sapi  (master + pembelian sapi)
+# 3b. M_Batch  (modul batch penggemukan -- mengunci biaya per periode)
+# ============================================================================
+cols = [
+    {'header':'Kode Batch','width':12,'kind':'input','style':'i_text'},
+    {'header':'Keterangan','width':26,'kind':'input','style':'i_text'},
+    {'header':'Kandang','width':16,'kind':'input','style':'i_text'},
+    {'header':'Tgl Mulai','width':12,'kind':'input','style':'i_date'},
+    {'header':'Tgl Selesai','width':12,'kind':'input','style':'i_date'},
+    {'header':'Status','width':10,'kind':'formula','style':'o_text',
+     'formula':'IF($A{r}="","",IF($E{r}="","Aktif","Tutup"))'},
+    {'header':'Lama (hari)','width':11,'kind':'formula','style':'o_days',
+     'formula':'IF($A{r}="","",IF($D{r}="","",IF($E{r}="",TODAY()-$D{r},$E{r}-$D{r})))'},
+    {'header':'Lama (bln)','width':10,'kind':'formula','style':'o_adg',
+     'formula':'IF($A{r}="","",IFERROR($G{r}/30,0))'},
+    {'header':'Jumlah Sapi','width':11,'kind':'formula','style':'o_int',
+     'formula':f'IF($A{{r}}="","",COUNTIF({R_SAPI_BATCH},$A{{r}}))'},
+    {'header':'Total Cattle-days','width':14,'kind':'formula','style':'o_days',
+     'formula':f'IF($A{{r}}="","",SUMIFS({R_SAPI_HARI},{R_SAPI_BATCH},$A{{r}}))'},
+    {'header':'Biaya Pakan','width':15,'kind':'formula','style':'o_rp',
+     'formula':f'IF($A{{r}}="","",SUMIFS({R_PKK_NILAI},{R_PKK_BATCH},$A{{r}}))'},
+    {'header':'Biaya Operasional','width':16,'kind':'formula','style':'o_rp',
+     'formula':f'IF($A{{r}}="","",SUMIFS({R_OPER_JUMLAH},{R_OPER_BATCH},$A{{r}}))'},
+    {'header':'Penyusutan','width':15,'kind':'formula','style':'o_rp',
+     'formula':f'IF($A{{r}}="","",SUM({R_ASET_F})*$H{{r}})'},
+    {'header':'Total Biaya Batch','width':16,'kind':'formula','style':'o_rp',
+     'formula':'IF($A{r}="","",$K{r}+$L{r}+$M{r})'},
+]
+samples=[
+    {1:('B001','str'),2:('Batch Penggemukan #1','str'),3:('K1','str'),4:(serial(2025,7,1),'n')},
+]
+sheets.append(data_sheet('M_Batch', cols, BATCH_N, samples, 'FF4472C4'))
+
+# ============================================================================
+# 4. M_Sapi  (master + pembelian sapi)  -- tanpa Kelompok, Batch di col F
 # ============================================================================
 cols = [
     {'header':'ID Sapi','width':10,'kind':'input','style':'i_text'},
@@ -393,7 +430,7 @@ cols = [
      'dv':'"Limousin,Simental,PO,Brahman,Bali,Madura,Lain-lain"'},
     {'header':'Bobot Awal','width':11,'kind':'input','style':'i_kg'},
     {'header':'Harga Beli','width':15,'kind':'input','style':'i_rp'},
-    {'header':'Kelompok','width':11,'kind':'input','style':'i_text','dv':KEL_LIST},
+    {'header':'Batch','width':10,'kind':'input','style':'i_text','dv':BATCH_LIST},
     {'header':'Status Input','width':11,'kind':'input','style':'i_text','dv':'"Aktif,Mati"'},
     {'header':'Tgl Mati','width':12,'kind':'input','style':'i_date'},
     {'header':'Terjual?','width':9,'kind':'formula','style':'o_int',
@@ -406,12 +443,12 @@ cols = [
      'formula':'IF($A{r}="","",IF($K{r}="",TODAY()-$B{r},$K{r}-$B{r}))'},
 ]
 samples=[
-    {1:('S001','str'),2:(serial(2025,9,1),'n'),3:('Limousin','str'),4:(280,'n'),5:(28000000,'n'),6:('K1','str'),7:('Aktif','str')},
-    {1:('S002','str'),2:(serial(2025,9,1),'n'),3:('Simental','str'),4:(290,'n'),5:(29500000,'n'),6:('K1','str'),7:('Aktif','str')},
-    {1:('S003','str'),2:(serial(2025,8,15),'n'),3:('PO','str'),4:(330,'n'),5:(31000000,'n'),6:('K2','str'),7:('Aktif','str')},
-    {1:('S004','str'),2:(serial(2025,8,15),'n'),3:('Brahman','str'),4:(345,'n'),5:(33000000,'n'),6:('K2','str'),7:('Aktif','str')},
-    {1:('S005','str'),2:(serial(2025,7,1),'n'),3:('Limousin','str'),4:(410,'n'),5:(41000000,'n'),6:('K3','str'),7:('Aktif','str')},
-    {1:('S006','str'),2:(serial(2025,7,1),'n'),3:('Simental','str'),4:(420,'n'),5:(42500000,'n'),6:('K3','str'),7:('Aktif','str')},
+    {1:('S001','str'),2:(serial(2025,9,1),'n'),3:('Limousin','str'),4:(280,'n'),5:(28000000,'n'),6:('B001','str'),7:('Aktif','str')},
+    {1:('S002','str'),2:(serial(2025,9,1),'n'),3:('Simental','str'),4:(290,'n'),5:(29500000,'n'),6:('B001','str'),7:('Aktif','str')},
+    {1:('S003','str'),2:(serial(2025,8,15),'n'),3:('PO','str'),4:(330,'n'),5:(31000000,'n'),6:('B001','str'),7:('Aktif','str')},
+    {1:('S004','str'),2:(serial(2025,8,15),'n'),3:('Brahman','str'),4:(345,'n'),5:(33000000,'n'),6:('B001','str'),7:('Aktif','str')},
+    {1:('S005','str'),2:(serial(2025,7,1),'n'),3:('Limousin','str'),4:(410,'n'),5:(41000000,'n'),6:('B001','str'),7:('Aktif','str')},
+    {1:('S006','str'),2:(serial(2025,7,1),'n'),3:('Simental','str'),4:(420,'n'),5:(42500000,'n'),6:('B001','str'),7:('Mati','str'),8:(serial(2026,1,15),'n')},
 ]
 sheets.append(data_sheet('M_Sapi', cols, SAPI_N, samples, 'FF548235'))
 
@@ -436,13 +473,13 @@ samples=[
 sheets.append(data_sheet('Pakan_Masuk', cols, PAKANM_N, samples, 'FF548235'))
 
 # ============================================================================
-# 6. Pakan_Keluar (konsumsi harian per kelompok)  -- valuasi rata-rata
+# 6. Pakan_Keluar (konsumsi harian per batch)  -- valuasi rata-rata
 # ============================================================================
 avg_num = f'SUMIFS({R_PKM_D},{R_PKM_B},$C{{r}})'
 avg_den = f'SUMIFS({R_PKM_C},{R_PKM_B},$C{{r}})'
 cols = [
     {'header':'Tgl','width':12,'kind':'input','style':'i_date'},
-    {'header':'Kelompok','width':11,'kind':'input','style':'i_text','dv':KEL_LIST},
+    {'header':'Batch','width':10,'kind':'input','style':'i_text','dv':BATCH_LIST},
     {'header':'Kode Pakan','width':13,'kind':'input','style':'i_text','dv':PKM_LIST},
     {'header':'Qty (kg)','width':12,'kind':'input','style':'i_kg'},
     {'header':'Harga Rata2/kg','width':14,'kind':'formula','style':'o_rp2',
@@ -451,12 +488,12 @@ cols = [
      'formula':'IF($C{r}="","",$D{r}*$E{r})'},
 ]
 samples=[
-    {1:(serial(2025,9,2),'n'),2:('K1','str'),3:('PK01','str'),4:(40,'n')},
-    {1:(serial(2025,9,2),'n'),2:('K1','str'),3:('PK02','str'),4:(12,'n')},
-    {1:(serial(2025,9,2),'n'),2:('K2','str'),3:('PK01','str'),4:(45,'n')},
-    {1:(serial(2025,9,2),'n'),2:('K2','str'),3:('PK02','str'),4:(14,'n')},
-    {1:(serial(2025,9,2),'n'),2:('K3','str'),3:('PK01','str'),4:(55,'n')},
-    {1:(serial(2025,9,2),'n'),2:('K3','str'),3:('PK02','str'),4:(18,'n')},
+    {1:(serial(2025,9,2),'n'),2:('B001','str'),3:('PK01','str'),4:(40,'n')},
+    {1:(serial(2025,9,2),'n'),2:('B001','str'),3:('PK02','str'),4:(12,'n')},
+    {1:(serial(2025,9,2),'n'),2:('B001','str'),3:('PK01','str'),4:(45,'n')},
+    {1:(serial(2025,9,2),'n'),2:('B001','str'),3:('PK02','str'),4:(14,'n')},
+    {1:(serial(2025,9,2),'n'),2:('B001','str'),3:('PK01','str'),4:(55,'n')},
+    {1:(serial(2025,9,2),'n'),2:('B001','str'),3:('PK02','str'),4:(18,'n')},
 ]
 sheets.append(data_sheet('Pakan_Keluar', cols, PAKANK_N, samples, 'FF548235'))
 
@@ -489,20 +526,21 @@ samples=[
 sheets.append(data_sheet('Timbang', cols, TIMB_N, samples, 'FF548235'))
 
 # ============================================================================
-# 8. Operasional
+# 8. Operasional  -- ditandai Batch agar biaya terkunci per periode
 # ============================================================================
 cols = [
     {'header':'Tgl','width':12,'kind':'input','style':'i_date'},
+    {'header':'Batch','width':10,'kind':'input','style':'i_text','dv':BATCH_LIST},
     {'header':'Jenis Biaya','width':18,'kind':'input','style':'i_text',
      'dv':'"Gaji Karyawan,Listrik,Air,BBM,Obat & Vitamin,Perbaikan Kandang,Lain-lain"'},
     {'header':'Jumlah','width':15,'kind':'input','style':'i_rp'},
     {'header':'Keterangan','width':30,'kind':'input','style':'i_text'},
 ]
 samples=[
-    {1:(serial(2025,9,30),'n'),2:('Gaji Karyawan','str'),3:(4500000,'n'),4:('Gaji 2 karyawan','str')},
-    {1:(serial(2025,9,30),'n'),2:('Listrik','str'),3:(650000,'n'),4:('Tagihan bulanan','str')},
-    {1:(serial(2025,9,30),'n'),2:('BBM','str'),3:(500000,'n'),4:('Solar chopper','str')},
-    {1:(serial(2025,9,10),'n'),2:('Obat & Vitamin','str'),3:(800000,'n'),4:('Vitamin B-complex','str')},
+    {1:(serial(2025,9,30),'n'),2:('B001','str'),3:('Gaji Karyawan','str'),4:(4500000,'n'),5:('Gaji 2 karyawan','str')},
+    {1:(serial(2025,9,30),'n'),2:('B001','str'),3:('Listrik','str'),4:(650000,'n'),5:('Tagihan bulanan','str')},
+    {1:(serial(2025,9,30),'n'),2:('B001','str'),3:('BBM','str'),4:(500000,'n'),5:('Solar chopper','str')},
+    {1:(serial(2025,9,10),'n'),2:('B001','str'),3:('Obat & Vitamin','str'),4:(800000,'n'),5:('Vitamin B-complex','str')},
 ]
 sheets.append(data_sheet('Operasional', cols, OPER_N, samples, 'FF548235'))
 
@@ -549,7 +587,7 @@ cols = [
     {'header':'Harga Rata2/kg','width':14,'kind':'formula','style':'o_rp2',
      'formula':'IF($A{r}="","",IFERROR($D{r}/$C{r},0))'},
     {'header':'Total Keluar (kg)','width':15,'kind':'formula','style':'o_kg',
-     'formula':f'IF($A{{r}}="","",SUMIFS({R_PKK_D},{R_PKK_C},$A{{r}}))'},
+     'formula':f'IF($A{{r}}="","",SUMIFS({R_PKK_QTY},{R_PKK_KODE},$A{{r}}))'},
     {'header':'Stok Akhir (kg)','width':14,'kind':'formula','style':'o_kg',
      'formula':'IF($A{r}="","",$C{r}-$F{r})'},
     {'header':'Nilai Stok Akhir','width':16,'kind':'formula','style':'o_rp',
@@ -560,17 +598,22 @@ cols = [
 sheets.append(data_sheet('Stok_Pakan', cols, PKM_N, [], 'FFBF8F00'))
 
 # ============================================================================
-# 11. HPP_Sapi  (mesin HPP per ekor) -- mirror M_Sapi
+# 11. HPP_Sapi  (mesin HPP per ekor -- BERBASIS BATCH) -- mirror M_Sapi
 # ============================================================================
 bobot_terkini = (
     f'IF($A{{r}}="","",IF(COUNTIF({R_JUALB},$A{{r}})>0,'
     f'IFERROR(INDEX({R_JUALC},MATCH($A{{r}},{R_JUALB},0)),0),'
     f'IFERROR(LOOKUP(2,1/({R_TIMB_A}=$A{{r}}),{R_TIMB_C}),M_Sapi!$D{{r}})))'
 )
+# total & cattle-days batch diambil dari M_Batch (terkunci setelah batch ditutup)
+b_pakan = f'INDEX({R_BATCH_K},MATCH($B{{r}},{R_BATCH_A},0))'
+b_oper  = f'INDEX({R_BATCH_L},MATCH($B{{r}},{R_BATCH_A},0))'
+b_susut = f'INDEX({R_BATCH_M},MATCH($B{{r}},{R_BATCH_A},0))'
+b_days  = f'INDEX({R_BATCH_J},MATCH($B{{r}},{R_BATCH_A},0))'
 cols = [
     {'header':'ID Sapi','width':10,'kind':'formula','style':'o_text',
      'formula':'IF(M_Sapi!$A{r}="","",M_Sapi!$A{r})'},
-    {'header':'Kelompok','width':10,'kind':'formula','style':'o_text',
+    {'header':'Batch','width':10,'kind':'formula','style':'o_text',
      'formula':'IF($A{r}="","",M_Sapi!$F{r})'},
     {'header':'Status','width':10,'kind':'formula','style':'o_text',
      'formula':'IF($A{r}="","",M_Sapi!$J{r})'},
@@ -578,12 +621,12 @@ cols = [
      'formula':'IF($A{r}="","",M_Sapi!$L{r})'},
     {'header':'Harga Beli','width':15,'kind':'formula','style':'o_rp',
      'formula':'IF($A{r}="","",M_Sapi!$E{r})'},
-    {'header':'Biaya Pakan (alokasi)','width':17,'kind':'formula','style':'o_rp',
-     'formula':f'IF($A{{r}}="","",IFERROR(SUMIFS({R_PKK_F},{R_PKK_B},$B{{r}})*$D{{r}}/SUMIFS({R_SAPI_L},{R_SAPI_F},$B{{r}}),0))'},
-    {'header':'Biaya Operasional (alokasi)','width':19,'kind':'formula','style':'o_rp',
-     'formula':f'IF($A{{r}}="","",IFERROR(SUM({R_OPERC})*$D{{r}}/SUM({R_SAPI_L}),0))'},
-    {'header':'Penyusutan (alokasi)','width':17,'kind':'formula','style':'o_rp',
-     'formula':f'IF($A{{r}}="","",IFERROR(SUM({R_ASET_H})*$D{{r}}/SUM({R_SAPI_L}),0))'},
+    {'header':'Biaya Pakan (alokasi batch)','width':18,'kind':'formula','style':'o_rp',
+     'formula':f'IF($A{{r}}="","",IFERROR({b_pakan}*$D{{r}}/{b_days},0))'},
+    {'header':'Biaya Operasional (alokasi batch)','width':20,'kind':'formula','style':'o_rp',
+     'formula':f'IF($A{{r}}="","",IFERROR({b_oper}*$D{{r}}/{b_days},0))'},
+    {'header':'Penyusutan (alokasi batch)','width':18,'kind':'formula','style':'o_rp',
+     'formula':f'IF($A{{r}}="","",IFERROR({b_susut}*$D{{r}}/{b_days},0))'},
     {'header':'HPP Total','width':16,'kind':'formula','style':'o_rp',
      'formula':'IF($A{r}="","",$E{r}+$F{r}+$G{r}+$H{r})'},
     {'header':'Bobot Terkini (kg)','width':15,'kind':'formula','style':'o_kg',
@@ -621,7 +664,7 @@ lk_row(12,'Kas Masuk — Penjualan Sapi','D4')
 lk_row(13,'Total Kas Masuk','D11+D12',val_st='v_rp')
 lk_row(14,'Kas Keluar — Beli Sapi Bakalan', f'SUM(M_Sapi!$E$2:$E${SAPI_N+1})')
 lk_row(15,'Kas Keluar — Beli Pakan', f'SUM({R_PKM_D})')
-lk_row(16,'Kas Keluar — Biaya Operasional', f'SUM({R_OPERC})')
+lk_row(16,'Kas Keluar — Biaya Operasional', f'SUM({R_OPER_JUMLAH})')
 lk_row(17,'Kas Keluar — Beli Aset Tetap', f'SUM(M_AsetTetap!$C$2:$C${ASET_N+1})')
 lk_row(18,'Total Kas Keluar','D14+D15+D16+D17',val_st='v_rp')
 lk_row(19,'SALDO KAS AKHIR','D13-D18',val_st='v_rp_tot')
@@ -630,30 +673,32 @@ lk_row(22,'ASET',lab_st='labelband'); lk.merge(22,2,22,4)
 lk_row(23,'Kas','D19')
 lk_row(24,'Persediaan Sapi (Aktif)', f'SUMIFS({R_HPP_I},{R_HPP_C},"Aktif")')
 lk_row(25,'Persediaan Pakan', f'SUM(Stok_Pakan!$H$2:$H${PKM_N+1})')
-lk_row(26,'Aset Tetap (Nilai Buku)', f'SUM(M_AsetTetap!$I$2:$I${ASET_N+1})')
+lk_row(26,'Aset Tetap (Nilai Buku)', f'SUM({R_ASET_C})-SUM({R_BATCH_M})')
 lk_row(27,'TOTAL ASET','D23+D24+D25+D26',val_st='v_rp_tot')
 lk_row(29,'PASIVA & MODAL',lab_st='labelband'); lk.merge(29,2,29,4)
 lk_row(30,'Modal Disetor','MENU!$B$5')
 lk_row(31,'Laba Ditahan (akumulasi laba bersih)','D8')
 lk_row(32,'TOTAL PASIVA & MODAL','D30+D31',val_st='v_rp_tot')
 lk_row(34,'Cek Keseimbangan (harus = 0)','D27-D32',val_st='v_rp')
-lk.put(36,2,'Catatan: Biaya pakan, operasional & penyusutan menempel ke sapi (metode HPP akurat). '
-             'Biaya baru menjadi beban (HPP) saat sapi terjual; selama belum terjual nilainya berada di Persediaan Sapi.',
-       'str',ST['note']); lk.merge(36,2,37,4)
+lk.put(36,2,'Catatan: Biaya pakan, operasional & penyusutan dikelompokkan per BATCH lalu menempel ke sapi '
+             '(metode HPP akurat). Setelah batch ditutup (Tgl Selesai diisi), biaya & HPP batch tsb TERKUNCI '
+             'sehingga margin penjualan historis tidak berubah walau ada batch/biaya periode baru. '
+             'Penyusutan diakui sepanjang batch berjalan = (penyusutan/bln semua aset) x lama batch.',
+       'str',ST['note']); lk.merge(36,2,38,4)
 sheets.append(lk)
 
 # ============================================================================
-# 13. Analisis (per ekor + per kelompok FCG)
+# 13. Analisis (per ekor + per BATCH FCG)
 # ============================================================================
-an = Sheet('Analisis', cols=[(1,1,9),(2,2,10),(3,3,10),(4,4,11),(5,5,12),(6,6,11),
-                              (7,7,8),(8,8,12),(9,9,15),(10,10,15),(11,11,15),(12,12,10),
-                              (13,13,3),(14,14,11),(15,15,11),(16,16,13),(17,17,16),(18,18,15),(19,19,12)],
+an = Sheet('Analisis', cols=[(1,1,9),(2,2,10),(3,3,10),(4,4,11),(5,5,11),
+                              (6,6,11),(7,7,8),(8,8,11),(9,9,15),(10,10,15),(11,11,15),(12,12,10),
+                              (13,13,3),(14,14,11),(15,15,10),(16,16,11),(17,17,14),(18,18,16),(19,19,15),(20,20,12)],
            freeze_row=1, protect=True, tabcolor='FF7030A0')
-ehead = ['ID Sapi','Kelompok','Status','Bobot Awal','Bobot Akhir','Pertambahan',
+ehead = ['ID Sapi','Batch','Status','Bobot Awal','Bobot Akhir','Pertambahan',
          'Hari','ADG (kg/hr)','HPP Total','Harga Jual','Margin','Margin %']
 for i,h in enumerate(ehead): an.put(1,i+1,h,'str',ST['header'])
-khead = ['Kelompok','Jumlah Sapi','ADG Rata2','FCG (Rp/kg gain)','Total Biaya Pakan','Total Gain (kg)']
-for i,h in enumerate(khead): an.put(1,14+i,h,'str',ST['header'])
+bhead = ['Batch','Status','Jumlah Sapi','Total Gain (kg)','Total Biaya Pakan','FCG (Rp/kg gain)','ADG Rata2']
+for i,h in enumerate(bhead): an.put(1,14+i,h,'str',ST['header'])
 for r in range(2, SAPI_N+2):
     an.put(r,1, f'IF(M_Sapi!$A{r}="","",M_Sapi!$A{r})','formula',ST['o_text'])
     an.put(r,2, f'IF($A{r}="","",M_Sapi!$F{r})','formula',ST['o_text'])
@@ -667,13 +712,14 @@ for r in range(2, SAPI_N+2):
     an.put(r,10,f'IF($A{r}="","",IFERROR(INDEX({R_JUALE},MATCH($A{r},{R_JUALB},0)),0))','formula',ST['o_rp'])
     an.put(r,11,f'IF($A{r}="","",IF($J{r}=0,0,$J{r}-$I{r}))','formula',ST['o_rp'])
     an.put(r,12,f'IF(OR($A{r}="",$J{r}=0),"",$K{r}/$J{r})','formula',ST['o_pct'])
-for r in range(2, KEL_N+2):
-    an.put(r,14,f'IF(M_Kelompok!$A{r}="","",M_Kelompok!$A{r})','formula',ST['o_text'])
-    an.put(r,15,f'IF($N{r}="","",COUNTIF({R_SAPI_F},$N{r}))','formula',ST['o_int'])
-    an.put(r,16,f'IF($N{r}="","",IFERROR(AVERAGEIFS($H$2:$H${SAPI_N+1},$B$2:$B${SAPI_N+1},$N{r}),0))','formula',ST['o_adg'])
-    an.put(r,17,f'IF($N{r}="","",IFERROR($R{r}/$P{r},0))','formula',ST['o_rp2'])
-    an.put(r,18,f'IF($N{r}="","",SUMIFS({R_PKK_F},{R_PKK_B},$N{r}))','formula',ST['o_rp'])
-    an.put(r,19,f'IF($N{r}="","",SUMIFS($F$2:$F${SAPI_N+1},$B$2:$B${SAPI_N+1},$N{r}))','formula',ST['o_kg'])
+for r in range(2, BATCH_N+2):
+    an.put(r,14,f'IF(M_Batch!$A{r}="","",M_Batch!$A{r})','formula',ST['o_text'])
+    an.put(r,15,f'IF($N{r}="","",M_Batch!$F{r})','formula',ST['o_text'])
+    an.put(r,16,f'IF($N{r}="","",M_Batch!$I{r})','formula',ST['o_int'])
+    an.put(r,17,f'IF($N{r}="","",SUMIFS($F$2:$F${SAPI_N+1},$B$2:$B${SAPI_N+1},$N{r}))','formula',ST['o_kg'])
+    an.put(r,18,f'IF($N{r}="","",M_Batch!$K{r})','formula',ST['o_rp'])
+    an.put(r,19,f'IF($N{r}="","",IFERROR($R{r}/$Q{r},0))','formula',ST['o_rp2'])
+    an.put(r,20,f'IF($N{r}="","",IFERROR(AVERAGEIFS($H$2:$H${SAPI_N+1},$B$2:$B${SAPI_N+1},$N{r}),0))','formula',ST['o_adg'])
 sheets.append(an)
 
 # ============================================================================
@@ -696,21 +742,26 @@ card(6,6,'Nilai Persediaan Sapi','Lap_Keuangan!$D$24','kpi_t','kpi_rp')
 # row 9-10 cards
 card(9,2,'Persediaan Pakan','Lap_Keuangan!$D$25','kpi_t','kpi_rp')
 card(9,4,'ADG Rata-rata (kg/hr)', f'IFERROR(AVERAGE(Analisis!$H$2:$H${SAPI_N+1}),0)','kpi_t_o','kpi_n_o')
-card(9,6,'Margin Rata-rata', f'IFERROR(AVERAGE(Analisis!$L$2:$L${SAPI_N+1}),0)','kpi_t','kpi_n')
-# FCG table with bar
-db.put(13,2,'FEED COST PER GAIN (FCG) & PERFORMA PER KELOMPOK','str',ST['sect']); db.merge(13,2,13,6)
-for i,h in enumerate(['Kelompok','Jml Sapi','ADG','FCG (Rp/kg)','Visual FCG']):
+card(9,6,'Margin Bersih (%)', 'IFERROR(Lap_Keuangan!$D$8/Lap_Keuangan!$D$4,0)','kpi_t','kpi_pct')
+# row 11-12 cards (sapi mati/afkir + margin kotor)
+card(11,2,'Sapi Mati/Afkir', f'COUNTIF(M_Sapi!$J$2:$J${SAPI_N+1},"Mati")','kpi_t','kpi_n')
+card(11,4,'Kerugian Sapi Mati','Lap_Keuangan!$D$7','kpi_t','kpi_rp')
+card(11,6,'Margin Kotor (%)', 'IFERROR(Lap_Keuangan!$D$6/Lap_Keuangan!$D$4,0)','kpi_t','kpi_pct')
+# FCG table with bar (per BATCH)
+db.put(13,2,'FEED COST PER GAIN (FCG) & PERFORMA PER BATCH','str',ST['sect']); db.merge(13,2,13,6)
+for i,h in enumerate(['Batch','Jml Sapi','ADG','FCG (Rp/kg)','Visual FCG']):
     db.put(14,2+i,h,'str',ST['header'])
-for dr in range(15, 15+KEL_N):
-    ar = dr-13   # Analisis row (2..11)
+for dr in range(15, 27):       # tampilkan hingga 12 batch
+    ar = dr-13                 # baris tabel batch di Analisis (mulai 2)
     db.put(dr,2,f'IF(Analisis!$N{ar}="","",Analisis!$N{ar})','formula',ST['o_text'])
-    db.put(dr,3,f'IF($B{dr}="","",Analisis!$O{ar})','formula',ST['o_int'])
-    db.put(dr,4,f'IF($B{dr}="","",Analisis!$S{ar})','formula',ST['o_adg'])
-    db.put(dr,5,f'IF($B{dr}="","",Analisis!$R{ar})','formula',ST['o_rp2'])
-    db.put(dr,6,f'IF($B{dr}="","",REPT("|",ROUND(IFERROR($E{dr}/MAX(Analisis!$R$2:$R${KEL_N+1}),0)*25,0)))','formula',ST['bar'])
-db.put(26,2,'Catatan: Dashboard memuat ringkasan otomatis. FCG = total biaya pakan kelompok / total pertambahan bobot kelompok. '
-             'ADG = pertambahan bobot harian rata-rata. Margin = harga jual - HPP per ekor.',
-       'str',ST['note']); db.merge(26,2,27,6)
+    db.put(dr,3,f'IF($B{dr}="","",Analisis!$P{ar})','formula',ST['o_int'])
+    db.put(dr,4,f'IF($B{dr}="","",Analisis!$T{ar})','formula',ST['o_adg'])
+    db.put(dr,5,f'IF($B{dr}="","",Analisis!$S{ar})','formula',ST['o_rp2'])
+    db.put(dr,6,f'IF($B{dr}="","",REPT("|",ROUND(IFERROR($E{dr}/MAX(Analisis!$S$2:$S${BATCH_N+1}),0)*25,0)))','formula',ST['bar'])
+db.put(28,2,'Catatan: Dashboard otomatis. FCG = total biaya pakan batch / total pertambahan bobot batch. '
+             'ADG = pertambahan bobot harian rata-rata. Margin = harga jual - HPP per ekor. '
+             'Biaya & HPP batch yang sudah ditutup bersifat TERKUNCI.',
+       'str',ST['note']); db.merge(28,2,29,6)
 sheets.append(db)
 
 print("Lap_Keuangan, Analisis, DASHBOARD selesai.")
@@ -734,19 +785,19 @@ mn.put(9,2,'Nama Sheet','str',ST['header'])
 mn.put(9,3,'Fungsi','str',ST['header'])
 mn.put(9,4,'Tipe','str',ST['header'])
 directory = [
-    ('M_Kelompok','Master kelompok/kandang (K1, K2, ...)','INPUT'),
     ('M_Pakan','Master jenis pakan & satuan','INPUT'),
     ('M_AsetTetap','Master aset tetap + penyusutan otomatis','INPUT'),
-    ('M_Sapi','Master & pembelian sapi (bobot awal, harga)','INPUT'),
+    ('M_Batch','Master batch/periode penggemukan (pengunci biaya + kandang)','INPUT'),
+    ('M_Sapi','Master & pembelian sapi (isi Batch)','INPUT'),
     ('Pakan_Masuk','Pembelian/stok pakan masuk','INPUT'),
-    ('Pakan_Keluar','Konsumsi pakan harian per kelompok','INPUT'),
+    ('Pakan_Keluar','Konsumsi pakan harian (per batch)','INPUT'),
     ('Timbang','Penimbangan bobot berkala','INPUT'),
-    ('Operasional','Biaya operasional (gaji, listrik, dll)','INPUT'),
+    ('Operasional','Biaya operasional (tandai Batch)','INPUT'),
     ('Penjualan','Penjualan sapi','INPUT'),
     ('Stok_Pakan','Kartu stok pakan (valuasi rata-rata)','OUTPUT'),
-    ('HPP_Sapi','HPP per ekor (mesin perhitungan)','OUTPUT'),
+    ('HPP_Sapi','HPP per ekor berbasis batch (mesin hitung)','OUTPUT'),
     ('Lap_Keuangan','Laba Rugi, Arus Kas, Neraca','OUTPUT'),
-    ('Analisis','ADG, FCG/kelompok, margin/ekor','OUTPUT'),
+    ('Analisis','ADG, FCG per batch, margin/ekor','OUTPUT'),
     ('DASHBOARD','Ringkasan KPI & visual usaha','OUTPUT'),
 ]
 row = 10
@@ -761,11 +812,13 @@ mn.put(row,2,'PETUNJUK & KETERANGAN','str',ST['sect']); mn.merge(row,2,row,4); r
 notes = [
     'Isi HANYA sel berwarna HIJAU (INPUT). Sel ABU-ABU dihitung otomatis (jangan diubah).',
     'Sheet OUTPUT terkunci (proteksi). Untuk membuka: menu Review > Unprotect Sheet (tanpa password).',
-    'Metode: HPP akurat (biaya menempel ke sapi). Biaya jadi HPP saat sapi terjual.',
-    'Alokasi biaya operasional & penyusutan: berdasarkan HARI pemeliharaan (cattle-days).',
-    'Alokasi pakan dalam kelompok: berdasarkan hari (Opsi A). Valuasi pakan: rata-rata tertimbang.',
-    'Gunakan dropdown pada kolom Kelompok, Kode Pakan, ID Sapi, Jenis Biaya untuk hindari salah ketik.',
-    'Kapasitas data: hingga ~10 tahun. Cukup ketik di baris kosong berikutnya, formula sudah tersedia.',
+    'ALUR: buat Batch di M_Batch dulu -> tandai setiap sapi, pakan keluar, & operasional dengan Batch tsb.',
+    'Metode: HPP akurat berbasis BATCH. Biaya pakan/operasional/penyusutan dikelompokkan per batch.',
+    'Saat batch SELESAI: isi Tgl Selesai di M_Batch -> biaya & HPP batch itu TERKUNCI (margin historis tidak berubah).',
+    'Alokasi operasional & penyusutan dalam batch: berdasarkan HARI pemeliharaan. Valuasi pakan: rata-rata tertimbang.',
+    'Penyusutan batch = (penyusutan/bln semua aset) x lama batch (bulan). Kandang dicatat di M_Batch.',
+    'Gunakan dropdown pada kolom Batch, Kode Pakan, ID Sapi, Jenis Biaya untuk hindari salah ketik.',
+    'Kapasitas: 50 batch (3-4x/tahun x 10+ tahun). Cukup ketik di baris kosong berikutnya, formula sudah tersedia.',
 ]
 for n in notes:
     mn.put(row,2,n,'str',ST['note']); mn.merge(row,2,row,4); row+=1

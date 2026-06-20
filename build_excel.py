@@ -160,6 +160,7 @@ ST = {
     'kpi_t'     : S.add(font=2, fill=7, border=0, h='center', v='center', wrap=1, locked=1),
     'kpi_n'     : S.add(165, font=6, fill=7, border=0, h='center', v='center', locked=1),
     'kpi_rp'    : S.add(164, font=6, fill=7, border=0, h='center', v='center', locked=1),
+    'kpi_pct'   : S.add(168, font=6, fill=7, border=0, h='center', v='center', locked=1),
     'kpi_t_g'   : S.add(font=2, fill=10, border=0, h='center', v='center', wrap=1, locked=1),
     'kpi_n_g'   : S.add(164, font=6, fill=10, border=0, h='center', v='center', locked=1),
     'kpi_t_o'   : S.add(font=2, fill=11, border=0, h='center', v='center', wrap=1, locked=1),
@@ -741,10 +742,11 @@ card(6,6,'Nilai Persediaan Sapi','Lap_Keuangan!$D$24','kpi_t','kpi_rp')
 # row 9-10 cards
 card(9,2,'Persediaan Pakan','Lap_Keuangan!$D$25','kpi_t','kpi_rp')
 card(9,4,'ADG Rata-rata (kg/hr)', f'IFERROR(AVERAGE(Analisis!$H$2:$H${SAPI_N+1}),0)','kpi_t_o','kpi_n_o')
-card(9,6,'Margin Rata-rata', f'IFERROR(AVERAGE(Analisis!$L$2:$L${SAPI_N+1}),0)','kpi_t','kpi_n')
-# row 11-12 cards (sapi mati/afkir)
+card(9,6,'Margin Bersih (%)', 'IFERROR(Lap_Keuangan!$D$8/Lap_Keuangan!$D$4,0)','kpi_t','kpi_pct')
+# row 11-12 cards (sapi mati/afkir + margin kotor)
 card(11,2,'Sapi Mati/Afkir', f'COUNTIF(M_Sapi!$J$2:$J${SAPI_N+1},"Mati")','kpi_t','kpi_n')
 card(11,4,'Kerugian Sapi Mati','Lap_Keuangan!$D$7','kpi_t','kpi_rp')
+card(11,6,'Margin Kotor (%)', 'IFERROR(Lap_Keuangan!$D$6/Lap_Keuangan!$D$4,0)','kpi_t','kpi_pct')
 # FCG table with bar (per BATCH)
 db.put(13,2,'FEED COST PER GAIN (FCG) & PERFORMA PER BATCH','str',ST['sect']); db.merge(13,2,13,6)
 for i,h in enumerate(['Batch','Jml Sapi','ADG','FCG (Rp/kg)','Visual FCG']):
